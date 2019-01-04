@@ -24,6 +24,33 @@ class Boid {
     this.dom.setAttribute('stroke', colorGenerator(50, 50, 50, 1));
   }
 
+  checkObstacles(obstacles) {
+    let cpt = 0;
+    let separation = new Vector();
+
+    for (let i = 0; i < obstacles.length; i++) {
+      let dpos = new Vector(obstacles[i].position.x, obstacles[i].position.y);
+      dpos.sub(this.position);
+      let dist = dpos.norm(); // distance(boids[i].position, this.position);
+
+      // separation
+      if (dist > 0 && dist < obstacles[i].size) {
+        cpt += 1;
+        dpos.mult(-obstacles[i].coefficient / (dist));
+        separation.add(dpos);
+      }
+    }
+
+    if (cpt > 0) {
+      separation.div(cpt);
+      // separation.normalize();
+      // separation.mult(this.maxSpeed);
+      separation.sub(this.velocity);
+      separation.limitNorm(this.separationMax);
+    }
+    this.acceleration.add(separation);
+  }
+
   interact(boids) {
     let cpt = 0;
     let cpt2 = 0;
@@ -123,7 +150,7 @@ class Boid {
     this.position.add(this.velocity);
     this.acceleration.mult(0);
 
-    this.edges();
+    this.edges_old();
   }
 
   show() {
