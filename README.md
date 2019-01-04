@@ -6,8 +6,8 @@ https://www.youtube.com/watch?v=mhjuuHl6qHM
 
 ## Controls
 Mouse:
-  - left-third : control alignment with mouse Y-position
-  - center-third : control cohesion with mouse Y-position
-  - right-third : control separation with mouse Y-position
+  - clic : add an obstacle
 
-  - CTRL-clic : add an obstacle
+  - CTRL-left-third : control alignment with mouse Y-position
+  - CTRL-center-third : control cohesion with mouse Y-position
+  - CTRL-right-third : control separation with mouse Y-position

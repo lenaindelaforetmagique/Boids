@@ -23,21 +23,22 @@ for (let i = 0; i < 100; i++) {
 
 var obstacles = [];
 
-createObstacle = function(e) {
-  console.log("lla");
-  console.log(e);
-  let newObstacle = new Obstacle(e.clientX, e.clientY);
-  svgPicture.appendChild(newObstacle.dom);
-  obstacles.push(newObstacle);
-};
-
-
 // INPUT MOUSE
 var mouseDown = false;
+var ctrlMouseDown = false;
 var buttonON = 0;
 
-mouseEffect = function(e) {
+createObstacle = function(e) {
   if (mouseDown) {
+    console.log("ocui");
+    let newObstacle = new Obstacle(e.clientX, e.clientY);
+    svgPicture.appendChild(newObstacle.dom);
+    obstacles.push(newObstacle);
+  }
+};
+
+mouseEffect = function(e) {
+  if (ctrlMouseDown) {
     switch (buttonON) {
       case 1:
         ALIGN = e.clientY / window.innerHeight * 2;
@@ -57,9 +58,7 @@ mouseEffect = function(e) {
 svgPicture.addEventListener("mousedown", function(e) {
   e.preventDefault();
   if (e.ctrlKey) {
-    createObstacle(e);
-  } else {
-    mouseDown = true;
+    ctrlMouseDown = true;
     if (e.clientX < window.innerWidth / 3) {
       buttonON = 1;
     } else if (e.clientX < window.innerWidth * 2 / 3) {
@@ -68,23 +67,28 @@ svgPicture.addEventListener("mousedown", function(e) {
       buttonON = 3;
     }
     mouseEffect(e);
+  } else {
+    mouseDown = true;
+    createObstacle(e);
   }
-  console.log(e);
 });
 
 svgPicture.addEventListener("mousemove", function(e) {
   e.preventDefault();
   mouseEffect(e);
+  createObstacle(e);
 });
 
 svgPicture.addEventListener("mouseup", function(e) {
   e.preventDefault();
   mouseDown = false;
+  ctrlMouseDown = false;
 });
 
 svgPicture.addEventListener("mouseout", function(e) {
   e.preventDefault();
-  mouseDown = false;
+  ctrlMouseDown = false;
+  // ctrlMouseDown = false;
 });
 
 
