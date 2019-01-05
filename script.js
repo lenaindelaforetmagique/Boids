@@ -14,14 +14,22 @@ document.body.appendChild(svgPicture);
 
 
 // BOIDS GENERATION
+
+let FACT = window.innerWidth * window.innerHeight / 1000000;
+let nb_boids = FACT * 100;
+console.log(nb_boids);
 var boids = [];
-for (let i = 0; i < 100; i++) {
+for (let i = 0; i < nb_boids; i++) {
   let boid = new Boid();
   svgPicture.appendChild(boid.dom);
   boids.push(boid);
 }
 
 var obstacles = [];
+// obstacles = laby1();
+// obstacles = spiral();
+obstacles = circles();
+
 
 // INPUT MOUSE
 var mouseDown = false;
@@ -30,7 +38,6 @@ var buttonON = 0;
 
 createObstacle = function(e) {
   if (mouseDown) {
-    console.log("ocui");
     let newObstacle = new Obstacle(e.clientX, e.clientY);
     svgPicture.appendChild(newObstacle.dom);
     obstacles.push(newObstacle);
@@ -101,7 +108,7 @@ var refresh = function(ts) {
     LASTUPDATE = now;
 
     for (let i = 0; i < boids.length; i++) {
-      boids[i].interact(boids);
+      boids[i].checkBoids(boids);
       boids[i].checkObstacles(obstacles);
     }
 

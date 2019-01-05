@@ -12,12 +12,10 @@ class Boid {
     this.velocity = createRandomVector(0, 0, Math.random() * 2 + 2);
     this.acceleration = new Vector(0, 0);
 
+    this.size = Math.random() * 6 + 3;
+    this.influenceRadius = 100;
     this.maxForce = 1;
     this.maxSpeed = 4;
-
-    this.alignMax = this.maxForce; //1000;
-    this.cohesionMax = this.maxForce; //1000;
-    this.separationMax = this.maxForce; //    10;
 
     this.dom = document.createElementNS(SVGNS, 'polygon');
     this.dom.setAttribute('fill', colorGenerator(Math.random() * 255, Math.random() * 255, Math.random() * 255, 0.5));
@@ -25,86 +23,51 @@ class Boid {
   }
 
   checkObstacles(obstacles) {
-    let cpt = 0;
-    let separation = new Vector();
-
-    for (let i = 0; i < obstacles.length; i++) {
-      let dpos = new Vector(obstacles[i].position.x, obstacles[i].position.y);
-      dpos.sub(this.position);
-      let dist = dpos.norm(); // distance(boids[i].position, this.position);
-
-      // separation
-      if (dist > 0 && dist < obstacles[i].size) {
-        cpt += 1;
-        dpos.mult(-obstacles[i].coefficient / (dist));
-        separation.add(dpos);
-      }
+    let obstForce = new Vector();
+    for (let obstacle of obstacles) {
+      obstForce.add(obstacle.effectOnBoid(this));
     }
-
-    if (cpt > 0) {
-      separation.div(cpt);
-      // separation.normalize();
-      // separation.mult(this.maxSpeed);
-      separation.sub(this.velocity);
-      separation.limitNorm(this.separationMax);
-    }
-    this.acceleration.add(separation);
+    this.acceleration.add(obstForce);
   }
 
-  interact(boids) {
-    let cpt = 0;
-    let cpt2 = 0;
+
+  checkBoids(boids) {
+    let othersForce = new Vector();
+    for (let other of boids) {
+      othersForce.add(other.effectOnBoid(this));
+    }
+    this.acceleration.add(othersForce);
+  }
+
+
+  effectOnBoid(other) {
+    let effectForce = new Vector();
     let align = new Vector();
     let cohesion = new Vector();
     let separation = new Vector();
+    let delta_pos = new Vector(other.position.x, other.position.y);
+    delta_pos.sub(this.position);
+    let dist = delta_pos.norm();
+    if (other.velocity.x * delta_pos.x + other.velocity.y * delta_pos.y > 0) {
+      if (dist < this.size * 4) {
+        delta_pos.mult(1000 / (dist));
+        separation.add(delta_pos);
+      } else if (dist < this.influenceRadius) {
 
-    for (let i = 0; i < boids.length; i++) {
-      let dpos = new Vector(boids[i].position.x, boids[i].position.y);
-      dpos.sub(this.position);
-      let dist = dpos.norm(); // distance(boids[i].position, this.position);
+        align.add(this.velocity);
 
-      if (dist > 0 && dist < PERCEPTION) {
-        cpt += 1;
+        cohesion.add(this.position);
+        cohesion.sub(other.position);
+        cohesion.mult(0.005);
 
-        align.add(boids[i].velocity);
-
-        cohesion.add(boids[i].position);
-
-        // separation
-        if (dist < PERCEPTION * PROTECTION) {
-          cpt2 += 1;
-          dpos.mult(-1 / (dist));
-          separation.add(dpos);
-        }
       }
     }
+    effectForce.add(align);
+    effectForce.add(cohesion);
+    effectForce.add(separation);
+    // effectForce.mult(this.size / 5);
+    return effectForce;
 
-    if (cpt > 0) {
-      align.div(cpt);
-      align.normalize();
-      align.mult(this.maxSpeed);
-      align.sub(this.velocity);
-      align.limitNorm(this.alignMax);
-
-      cohesion.div(cpt);
-      cohesion.sub(this.position);
-      cohesion.limitNorm(this.cohesionMax);
-    }
-
-    if (cpt2 > 0) {
-      separation.div(cpt2);
-      // separation.normalize();
-      // separation.mult(this.maxSpeed);
-      separation.sub(this.velocity);
-      separation.limitNorm(this.separationMax);
-    }
-    align.mult(ALIGN);
-    cohesion.mult(COHESION);
-    separation.mult(SEPARATION);
-
-    this.acceleration.add(align);
-    this.acceleration.add(cohesion);
-    this.acceleration.add(separation);
   }
 
 
@@ -146,7 +109,9 @@ class Boid {
   }
 
   update() {
+    this.acceleration.limitNorm(this.maxForce);
     this.velocity.add(this.acceleration);
+    this.velocity.limitNorm(this.maxSpeed);
     this.position.add(this.velocity);
     this.acceleration.mult(0);
 
@@ -163,14 +128,14 @@ class Boid {
     let pointB = new Vector(this.position.x, this.position.y);
     let pointC = new Vector(this.position.x, this.position.y);
 
-    dx.mult(5);
+    dx.mult(this.size);
     pointA.add(dx);
     pointA.add(dx);
 
     pointB.sub(dx);
     pointC.sub(dx);
 
-    dy.mult(5)
+    dy.mult(this.size)
     pointB.add(dy);
     pointC.sub(dy);
 
