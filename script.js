@@ -16,7 +16,7 @@ document.body.appendChild(svgPicture);
 // BOIDS GENERATION
 
 let FACT = window.innerWidth * window.innerHeight / 1000000;
-let nb_boids = FACT * 100;
+let nb_boids = Math.max(Math.min(100, FACT * 100), 50);
 console.log(nb_boids);
 var boids = [];
 for (let i = 0; i < nb_boids; i++) {

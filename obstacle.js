@@ -98,7 +98,7 @@ circles = function() {
   let width = window.innerWidth;
   let height = window.innerHeight;
 
-  for (let i = 0; i < Math.random() * 6 * FACT - 1; i++) {
+  for (let i = 0; i < Math.random() * 6 * FACT; i++) {
     let xc = Math.random() * width;
     let yc = Math.random() * height;
     let radius = Math.random() * 100 + 40;
