@@ -4,6 +4,10 @@ class Vector {
     this.y = y_;
   }
 
+  copy() {
+    return new Vector(this.x, this.y);
+  }
+
   norm() {
     let res = Math.sqrt(this.x ** 2 + this.y ** 2);
     return res;
@@ -42,6 +46,20 @@ class Vector {
     if (norm_ > maxNorm) {
       this.mult(maxNorm / norm_);
     }
+  }
+
+  dotProduct(other) {
+    let res = 0;
+    res += this.x * other.x;
+    res += this.y * other.y;
+    return res;
+  }
+
+  rotate(angle) {
+    let new_x = this.x * Math.cos(angle) + this.y * Math.sin(angle);
+    let new_y = this.x * Math.sin(angle) - this.y * Math.cos(angle);
+    this.x = new_x;
+    this.y = new_y;
   }
 }
 

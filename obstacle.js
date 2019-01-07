@@ -1,6 +1,7 @@
 class Obstacle {
   constructor(x_, y_) {
     this.position = new Vector(x_, y_);
+    this.velocity = new Vector(0, 0);
     this.coefficient = 0.5 * 1000;
     this.size = 10;
     this.influenceRadius = 30;
@@ -20,8 +21,8 @@ class Obstacle {
     let dpos = new Vector(this.position.x, this.position.y);
     dpos.sub(boid.position);
     let dist = dpos.norm(); // distance(boids[i].position, this.position);
+    dpos.normalize();
 
-    // separation
     if (dist > 0 && dist < this.influenceRadius) {
       dpos.mult(-this.coefficient * (1 / dist - 1 / this.influenceRadius));
     } else {
