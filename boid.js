@@ -7,8 +7,8 @@ listXYToPolylinePoints = function(listX, listY) {
 }
 
 class Boid {
-  constructor() {
-    this.position = createRandomVector(window.innerWidth, window.innerHeight);
+  constructor(x_, y_) {
+    this.position = new Vector(x_, y_);
     this.velocity = createRandomVector(0, 0, Math.random() * 2 + 2);
     this.acceleration = new Vector(0, 0);
 
@@ -70,7 +70,7 @@ class Boid {
       let dist = delta_pos.norm();
 
       if (dist < this.viewRadius &&
-        this.velocity.dotProduct(delta_pos) > 0 &&
+        // this.velocity.dotProduct(delta_pos) > 0 &&
         dist > 2 * (this.size + boid.size)) {
         cpt += 1;
         cohesionForce.add(boid.position);
@@ -93,16 +93,16 @@ class Boid {
       delta_pos.sub(this.position);
       let dist = delta_pos.norm();
 
-      if (dist < this.viewRadius && this.velocity.dotProduct(delta_pos) > 0) {
+      if (dist < this.viewRadius / 2 && this.velocity.dotProduct(delta_pos) > 0) {
         cpt += 1;
         alignForce.add(boid.velocity);
       }
     }
     if (cpt > 0) {
       alignForce.div(cpt)
-      alignForce.sub(this.velocity);
+      // alignForce.sub(this.velocity);
     }
-    alignForce.mult(0.5);
+    alignForce.mult(0.25);
     return alignForce;
   }
 
@@ -113,10 +113,11 @@ class Boid {
 
   checkBoids(boids) {
     this.acceleration.add(this.separation(boids));
-    // if (this.acceleration.norm() == 0) {
+    if (this.acceleration.norm() == 0) {
+
+      this.acceleration.add(this.cohesion(boids));
+    }
     this.acceleration.add(this.alignment(boids));
-    this.acceleration.add(this.cohesion(boids));
-    // }
   }
 
   edges() {
@@ -159,7 +160,7 @@ class Boid {
   update() {
     this.acceleration.limitNorm(this.maxForce);
     this.velocity.add(this.acceleration);
-    this.velocity.mult(1.05);
+    this.velocity.mult(1.025);
     this.velocity.limitNorm(this.maxSpeed);
     this.position.add(this.velocity);
     this.acceleration.mult(0);
