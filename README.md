@@ -1,13 +1,17 @@
 # Boids
 Boids simulator
 
-Coding Challenge #124
-https://www.youtube.com/watch?v=mhjuuHl6qHM
+My version of Coding Challenge #124 https://www.youtube.com/watch?v=mhjuuHl6qHM
 
 ## Controls
 Mouse:
-  - clic : add an obstacle
+  - click to create Boids or Obstacles;
+  - click on selector to toggle Boids or Obstacles creator;
+  - wheel to zoom in/out
 
-  - CTRL-left-third : control alignment with mouse Y-position
-  - CTRL-center-third : control cohesion with mouse Y-position
-  - CTRL-right-third : control separation with mouse Y-position
+Touch:
+  - same as Mouse
+  - use more finger to zoom in/out or translate
+
+Keyboard:
+  - press CTRL to activate Obstacles creator
