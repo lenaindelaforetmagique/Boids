@@ -1,4 +1,4 @@
-let u_ = new Universe(window.innerWidth, window.innerHeight);
+let u_ = new Universe();
 
 var updateCB = function(timestamp) {
   u_.refresh(timestamp);

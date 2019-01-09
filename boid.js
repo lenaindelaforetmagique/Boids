@@ -114,48 +114,11 @@ class Boid {
   checkBoids(boids) {
     this.acceleration.add(this.separation(boids));
     if (this.acceleration.norm() == 0) {
-
       this.acceleration.add(this.cohesion(boids));
     }
     this.acceleration.add(this.alignment(boids));
   }
 
-  edges() {
-    if (this.position.x < 0) {
-      this.position.x = 0;
-      this.velocity.x *= -1;
-    }
-
-    if (this.position.x > window.innerWidth) {
-      this.position.x = window.innerWidth;
-      this.velocity.x *= -1;
-    }
-
-    if (this.position.y < 0) {
-      this.position.y = 0;
-      this.velocity.y *= -1;
-    }
-
-    if (this.position.y > window.innerHeight) {
-      this.position.y = window.innerHeight;
-      this.velocity.y *= -1;
-    }
-  }
-
-  edges_old() {
-    while (this.position.x < 0) {
-      this.position.x += window.innerWidth;
-    }
-    while (this.position.x > window.innerWidth) {
-      this.position.x -= window.innerWidth;
-    }
-    while (this.position.y < 0) {
-      this.position.y += window.innerHeight;
-    }
-    while (this.position.y > window.innerHeight) {
-      this.position.y -= window.innerHeight;
-    }
-  }
 
   update() {
     this.acceleration.limitNorm(this.maxForce);
@@ -164,8 +127,6 @@ class Boid {
     this.velocity.limitNorm(this.maxSpeed);
     this.position.add(this.velocity);
     this.acceleration.mult(0);
-
-    this.edges_old();
   }
 
   show() {
