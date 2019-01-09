@@ -77,7 +77,14 @@ class Universe {
 
     // TEXTblock events
     this.textBlock.btn1.addEventListener("mousedown", function(e) {
-      console.log("bouton");
+      thiz.clickFired = true;
+
+      thiz.boid_obstacle_selector = !thiz.boid_obstacle_selector;
+      thiz.textBlock.btn1_toggle(thiz.boid_obstacle_selector);
+      e.preventDefault();
+    }, false);
+
+    this.textBlock.btn1.addEventListener("touchstart", function(e) {
       thiz.clickFired = true;
 
       thiz.boid_obstacle_selector = !thiz.boid_obstacle_selector;
@@ -122,44 +129,49 @@ class Universe {
     // TOUCH events
     this.container.addEventListener("touchstart", function(e) {
       e.preventDefault();
-      thiz.mouseDown = true;
-      thiz.touchEvent.saveEvent(e);
-      if (thiz.touchEvent.size == 0) {
-        thiz.mouseClick(thiz.touchEvent.x, thiz.touchEvent.y);
+      if (!thiz.clickFired) {
+        thiz.mouseDown = true;
+        thiz.touchEvent.saveEvent(e);
+        if (thiz.touchEvent.size == 0) {
+          thiz.mouseClick(thiz.touchEvent.x, thiz.touchEvent.y);
+        }
       }
     }, false);
 
     this.container.addEventListener("touchmove", function(e) {
       e.preventDefault();
+      let newTouch = new TouchEvent();
+      newTouch.saveEvent(e);
       if (thiz.touchEvent.size == 0) {
-        thiz.mouseClick(thiz.touchEvent.x, thiz.touchEvent.y);
+        thiz.mouseClick(newTouch.x, newTouch.y);
       } else {
-        let newTouch = new TouchEvent();
-        newTouch.saveEvent(e);
         let dx = newTouch.x - this.touchEvent.x;
         let dy = newTouch.y - this.touchEvent.y;
 
         thiz.viewBox.translate(-dx, -dy);
         thiz.viewBox.scale(newTouch.x, newTouch.y, newTouch.size / thiz.touchEvent.size);
-        thiz.touchEvent = newTouch;
       }
+      thiz.touchEvent = newTouch;
     }, false);
 
     this.container.addEventListener("touchend", function(e) {
       e.preventDefault();
       thiz.mouseDown = false;
+      thiz.clickFired = false;
       thiz.touchEvent.reset();
     }, false);
 
     this.container.addEventListener("touchcancel", function(e) {
       e.preventDefault();
       thiz.mouseDown = false;
+      thiz.clickFired = false;
       thiz.touchEvent.reset();
     }, false);
 
     this.container.addEventListener("touchleave", function(e) {
       e.preventDefault();
       thiz.mouseDown = false;
+      thiz.clickFired = false;
       thiz.touchEvent.reset();
     }, false);
 
@@ -265,6 +277,10 @@ class ViewBox {
 
 class TouchEvent {
   constructor() {
+    this.init();
+  }
+
+  init() {
     this.x = null;
     this.y = null;
     this.size = null;
@@ -295,7 +311,7 @@ class TouchEvent {
   }
 
   reset() {
-    this.constructor();
+    // this.init();
   }
 
 
