@@ -142,7 +142,7 @@ class Universe {
       e.preventDefault();
       let newTouch = new TouchEvent();
       newTouch.saveEvent(e);
-      if (thiz.touchEvent.size == 0) {
+      if (newTouch.size == 0) {
         thiz.mouseClick(newTouch.x, newTouch.y);
       } else {
         let dx = newTouch.x - this.touchEvent.x;
