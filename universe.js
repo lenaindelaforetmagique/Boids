@@ -137,14 +137,13 @@ class Universe {
       if (!thiz.clickFired) {
         thiz.mouseDown = true;
         thiz.touchEvent.saveEvent(e);
-        if (thiz.touchEvent.size == 0) {
-          thiz.mouseClick(thiz.touchEvent.x, thiz.touchEvent.y);
-        }
+        // if (thiz.touchEvent.size == 0) {
+        //   thiz.mouseClick(thiz.touchEvent.x, thiz.touchEvent.y);
+        // }
       }
     }, false);
 
     this.container.addEventListener("touchmove", function(e) {
-
       e.preventDefault();
       let newTouch = new TouchEvent();
       newTouch.saveEvent(e);
@@ -164,8 +163,16 @@ class Universe {
     }, false);
 
     this.container.addEventListener("touchend", function(e) {
+      console.log(e);
       thiz.console(e.type + " " + e.touches.length);
       e.preventDefault();
+
+      if (!thiz.clickFired) {
+        if (thiz.touchEvent.size == 0) {
+          thiz.mouseClick(thiz.touchEvent.x, thiz.touchEvent.y);
+        }
+      }
+
       thiz.mouseDown = false;
       thiz.clickFired = false;
       thiz.touchEvent.reset();
@@ -276,7 +283,7 @@ class ViewBox {
   }
 
   translate(dx, dy) {
-    let domRect = thiz.parentSvg.getBoundingClientRect();
+    let domRect = this.parent.getBoundingClientRect();
     this.box[0] += dx / domRect.width * this.width;
     this.box[1] += dy / domRect.height * this.height;
     this.set();
