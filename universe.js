@@ -52,6 +52,10 @@ class Universe {
       }
     }
 
+    this.console = function(chaine) {
+      thiz.textBlock.log.textContent = chaine;
+    }
+
 
     // KEYBOARD Events
     document.onkeydown = function(e) {
@@ -128,6 +132,7 @@ class Universe {
 
     // TOUCH events
     this.container.addEventListener("touchstart", function(e) {
+      thiz.console(e.type + " " + e.touches.length);
       e.preventDefault();
       if (!thiz.clickFired) {
         thiz.mouseDown = true;
@@ -139,6 +144,7 @@ class Universe {
     }, false);
 
     this.container.addEventListener("touchmove", function(e) {
+      thiz.console(e.type + " " + e.touches.length);
       e.preventDefault();
       let newTouch = new TouchEvent();
       newTouch.saveEvent(e);
@@ -155,6 +161,7 @@ class Universe {
     }, false);
 
     this.container.addEventListener("touchend", function(e) {
+      thiz.console(e.type + " " + e.touches.length);
       e.preventDefault();
       thiz.mouseDown = false;
       thiz.clickFired = false;
@@ -162,6 +169,7 @@ class Universe {
     }, false);
 
     this.container.addEventListener("touchcancel", function(e) {
+      thiz.console(e.type + " " + e.touches.length);
       e.preventDefault();
       thiz.mouseDown = false;
       thiz.clickFired = false;
@@ -169,6 +177,7 @@ class Universe {
     }, false);
 
     this.container.addEventListener("touchleave", function(e) {
+      thiz.console(e.type + " " + e.touches.length);
       e.preventDefault();
       thiz.mouseDown = false;
       thiz.clickFired = false;
@@ -352,6 +361,16 @@ class TextBlock {
     this.title.textContent = "Boids";
     this.btn1_status = true;
     this.btn1_set();
+
+    this.log = document.createElementNS(SVGNS, "text");
+    this.log.setAttributeNS(null, "fill", "rgba(0,0,0,0.7)");
+    this.dom.appendChild(this.log);
+    this.log.setAttributeNS(null, "class", "button");
+    this.log.setAttributeNS(null, "font-size", "12px");
+    this.log.setAttributeNS(null, "x", 0);
+    this.log.setAttributeNS(null, "y", 80);
+
+
   }
 
   btn1_toggle(newvalue) {
