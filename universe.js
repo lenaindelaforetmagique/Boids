@@ -132,7 +132,6 @@ class Universe {
 
     // TOUCH events
     this.container.addEventListener("touchstart", function(e) {
-      thiz.console(e.type + " " + e.touches.length);
       e.preventDefault();
       if (!thiz.clickFired) {
         thiz.mouseDown = true;
@@ -147,26 +146,19 @@ class Universe {
       e.preventDefault();
       let newTouch = new TouchEvent();
       newTouch.saveEvent(e);
-      thiz.console(e.type + " " + e.touches.length + " " + newTouch.size);
       if (newTouch.size == 0) {
         thiz.mouseClick(newTouch.x, newTouch.y);
       } else {
         let dx = newTouch.x - thiz.touchEvent.x;
         let dy = newTouch.y - thiz.touchEvent.y;
-        thiz.console(e.type + " " + e.touches.length + " " + newTouch.size + "*1");
         thiz.viewBox.translate(-dx, -dy);
-        thiz.console(e.type + " " + e.touches.length + " " + newTouch.size + "*2");
         thiz.viewBox.scale(newTouch.x, newTouch.y, newTouch.size / thiz.touchEvent.size);
-        thiz.console(e.type + " " + e.touches.length + " " + newTouch.size + "*3");
       }
       thiz.touchEvent = newTouch;
     }, false);
 
     this.container.addEventListener("touchend", function(e) {
-      console.log(e);
-      thiz.console(e.type + " " + e.touches.length);
       e.preventDefault();
-
       if (!thiz.clickFired) {
         if (thiz.touchEvent.size == 0) {
           thiz.mouseClick(thiz.touchEvent.x, thiz.touchEvent.y);
@@ -179,7 +171,6 @@ class Universe {
     }, false);
 
     this.container.addEventListener("touchcancel", function(e) {
-      thiz.console(e.type + " " + e.touches.length);
       e.preventDefault();
       thiz.mouseDown = false;
       thiz.clickFired = false;
@@ -187,7 +178,6 @@ class Universe {
     }, false);
 
     this.container.addEventListener("touchleave", function(e) {
-      thiz.console(e.type + " " + e.touches.length);
       e.preventDefault();
       thiz.mouseDown = false;
       thiz.clickFired = false;
@@ -198,6 +188,20 @@ class Universe {
     // OTHER events
     window.onresize = function(e) {
       thiz.viewBox.resize();
+    }
+
+    window.onerror = function(msg, source, noligne, nocolonne, erreur) {
+      let str = "";
+      str += msg;
+      str += " * ";
+      str += source;
+      str += " * ";
+      str += noligne;
+      str += " * ";
+      str += nocolonne;
+      str += " * ";
+      // str += erreur;
+      thiz.console(str);
     }
   }
 
