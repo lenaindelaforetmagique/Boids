@@ -284,14 +284,10 @@ class ViewBox {
 
   translate(dx, dy) {
     let domRect = this.parent.getBoundingClientRect();
-    this.box[0] += dx / domRect.width * this.width;
-    this.box[1] += dy / domRect.height * this.height;
+    this.xMin += dx / domRect.width * this.width;
+    this.yMin += dy / domRect.height * this.height;
     this.set();
   }
-
-
-
-
 }
 
 class TouchEvent {
