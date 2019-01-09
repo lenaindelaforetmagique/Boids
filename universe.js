@@ -144,18 +144,21 @@ class Universe {
     }, false);
 
     this.container.addEventListener("touchmove", function(e) {
-      thiz.console(e.type + " " + e.touches.length);
+
       e.preventDefault();
       let newTouch = new TouchEvent();
       newTouch.saveEvent(e);
+      thiz.console(e.type + " " + e.touches.length + " " + newTouch.size);
       if (newTouch.size == 0) {
         thiz.mouseClick(newTouch.x, newTouch.y);
       } else {
         let dx = newTouch.x - this.touchEvent.x;
         let dy = newTouch.y - this.touchEvent.y;
-
+        thiz.console(e.type + " " + e.touches.length + " " + newTouch.size + "*1");
         thiz.viewBox.translate(-dx, -dy);
+        thiz.console(e.type + " " + e.touches.length + " " + newTouch.size + "*2");
         thiz.viewBox.scale(newTouch.x, newTouch.y, newTouch.size / thiz.touchEvent.size);
+        thiz.console(e.type + " " + e.touches.length + " " + newTouch.size + "*3");
       }
       thiz.touchEvent = newTouch;
     }, false);
