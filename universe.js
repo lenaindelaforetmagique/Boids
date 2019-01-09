@@ -151,8 +151,8 @@ class Universe {
       if (newTouch.size == 0) {
         thiz.mouseClick(newTouch.x, newTouch.y);
       } else {
-        let dx = newTouch.x - this.touchEvent.x;
-        let dy = newTouch.y - this.touchEvent.y;
+        let dx = newTouch.x - thiz.touchEvent.x;
+        let dy = newTouch.y - thiz.touchEvent.y;
         thiz.console(e.type + " " + e.touches.length + " " + newTouch.size + "*1");
         thiz.viewBox.translate(-dx, -dy);
         thiz.console(e.type + " " + e.touches.length + " " + newTouch.size + "*2");
