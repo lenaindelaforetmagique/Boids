@@ -145,7 +145,7 @@ class Universe {
     this.container.addEventListener("touchmove", function(e) {
       e.preventDefault();
       let newTouch = new TouchEvent();
-      newTouch.saveEvent(e);
+      newTouch.saveEvent(e, true);
       if (newTouch.size == 0) {
         thiz.mouseClick(newTouch.x, newTouch.y);
       } else {
@@ -159,7 +159,7 @@ class Universe {
 
     this.container.addEventListener("touchend", function(e) {
       e.preventDefault();
-      if (!thiz.clickFired) {
+      if (!thiz.clickFired && !thiz.touchEvent.hasMoved) {
         if (thiz.touchEvent.size == 0) {
           thiz.mouseClick(thiz.touchEvent.x, thiz.touchEvent.y);
         }
@@ -303,9 +303,10 @@ class TouchEvent {
     this.x = null;
     this.y = null;
     this.size = null;
+    this.hasMoved = null;
   }
 
-  saveEvent(e) {
+  saveEvent(e, hasMoved_ = false) {
     // position
     let x = 0;
     let y = 0;
@@ -327,14 +328,14 @@ class TouchEvent {
       }
     }
     this.size = Math.pow(lMax, 0.5);
+
+    // has hasMoved
+    this.hasMoved = hasMoved_;
   }
 
   reset() {
     // this.init();
   }
-
-
-
 }
 
 class TextBlock {

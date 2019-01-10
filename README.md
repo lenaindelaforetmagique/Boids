@@ -18,7 +18,7 @@ My version of [Coding Challenge #124](https://www.youtube.com/watch?v=mhjuuHl6qH
 
 ### Touch
   - same as Mouse
-  - use more finger to zoom in/out or translate
+  - use several fingers to zoom in/out or translate
 
 ### Keyboard
   - press CTRL to activate Obstacles creator
