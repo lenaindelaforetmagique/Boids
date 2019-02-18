@@ -26,6 +26,34 @@ svg, legend {
   cursor: pointer;
 }
 
+footer {
+  position: absolute;
+  top: 95%;
+  left: 50%;
+  -ms-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+}
+
+a {
+  text-decoration: none;
+}
+
+a:link {
+  color: rgba(0, 0, 0, 0.9);
+}
+
+a:visited {
+  color: rgba(0, 0, 0, 0.9);
+}
+
+a:hover {
+  color: rgba(0, 0, 0, 0.7);
+}
+
+a:active {
+  color: rgba(0, 0, 0, 0.7);
+}
+
 #container {
   margin: 0;
   padding: 0;
